@@ -1,4 +1,4 @@
-select product_name, customers.name
+select product_name
 from customers
          join orders o on customers.ID = o.customer_id
-where ucase(customers.name) = ucase(customers.name);
+where customers.name like :name;

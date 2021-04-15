@@ -1,5 +1,8 @@
 use jdbc1;
 
+drop table orders;
+drop table customers;
+
 create table if not exists customers
 (
     ID           int NOT NULL PRIMARY KEY AUTO_INCREMENT,

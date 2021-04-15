@@ -1,7 +1,11 @@
 package ru.netology.jdbc2;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
@@ -14,11 +18,8 @@ import java.util.stream.Collectors;
 @Repository
 public class JdbcRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    public JdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private static final String joinJdbc = read();
 
@@ -31,12 +32,17 @@ public class JdbcRepository {
         }
     }
 
-    public String getProductName(String product_name) {
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select * from customers");
-         if (sqlRowSet.getObject(customers.name)) {
-             return product_name;
-         }
-        return jdbcTemplate.queryForObject(joinJdbc, String.class);
+    public String getProductName(String name) {
+        StringBuilder sb = new StringBuilder();
+        SqlParameterSource namedParameters = new MapSqlParameterSource("name", "%" + name + "%");
+        String joinJdbc = read();
+        SqlRowSet obj = namedParameterJdbcTemplate.queryForRowSet(joinJdbc, namedParameters);
+
+        while (obj.next()) {
+            sb.append(obj.getString("product_name"));
+            sb.append(";");
+        }
+        return sb.toString();
     }
 
 }

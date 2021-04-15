@@ -13,7 +13,7 @@ public class JdbcService {
         this.jdbcRepository = jdbcRepository;
     }
 
-    public String getProductName(String product_name) {
-        return jdbcRepository.getProductName(product_name);
+    public String getProductName(String name) {
+        return jdbcRepository.getProductName(name);
     }
 }

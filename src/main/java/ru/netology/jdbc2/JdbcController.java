@@ -16,7 +16,7 @@ public class JdbcController {
     }
 
     @GetMapping("/products/fetch-product")
-    public String fetchProduct(@RequestParam("name") String name) {
-        return jdbcService.getProductName(product_name);
+    public String fetchProduct(@RequestParam String name) {
+        return jdbcService.getProductName(name);
     }
 }
